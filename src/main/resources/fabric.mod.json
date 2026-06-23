@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "discgun",
+	"version": "${version}",
+	"name": "DiscGun",
+	"description": "Roguelike speed-shooter where you load music discs into a gun-shaped CD player and fight with each song's identity. Phase 1 MVP.",
+	"authors": [
+		"risudayooo"
+	],
+	"contact": {},
+	"license": "ARR",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.risudayooo.discgun.DiscGunMod"
+		],
+		"client": [
+			"com.risudayooo.discgun.client.DiscGunClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "discgun.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"fabric-api": "*",
+		"minecraft": "~1.21.1",
+		"java": ">=21"
+	}
+}

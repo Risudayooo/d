@@ -1,0 +1,23 @@
+{
+	"itemGroup.discgun.general": "DiscGun",
+
+	"item.discgun.gun_cd_player": "銃型CDプレイヤー",
+	"item.discgun.disc_house": "ディスク: House",
+	"item.discgun.disc_dubstep": "ディスク: Dubstep",
+	"item.discgun.disc_dnb": "ディスク: DnB",
+
+	"disc.discgun.house": "House",
+	"disc.discgun.dubstep": "Dubstep",
+	"disc.discgun.dnb": "DnB",
+
+	"tooltip.discgun.loaded_disc": "装填中のディスク: ",
+	"tooltip.discgun.controls": "左クリック射撃 / 右クリック固有 / Alt ブリンク / F パリィ / R リロード",
+
+	"message.discgun.disc_loaded": "%s を銃型CDプレイヤーに装填した",
+	"message.discgun.no_gun": "インベントリに銃型CDプレイヤーがありません",
+
+	"key.categories.discgun": "DiscGun",
+	"key.discgun.blink": "ブリンク(ダッシュ)",
+	"key.discgun.parry": "パリィ",
+	"key.discgun.reload": "リロード"
+}
