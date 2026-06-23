@@ -11,7 +11,10 @@
 	"disc.discgun.dnb": "DnB",
 
 	"tooltip.discgun.loaded_disc": "Loaded disc: ",
+	"tooltip.discgun.ammo": "Ammo: %s / %s",
 	"tooltip.discgun.controls": "LMB fire / RMB disc action / Alt blink / F parry / R reload",
+
+	"hud.discgun.reloading": "RELOADING...",
 
 	"message.discgun.disc_loaded": "Loaded %s into your Gun CD Player",
 	"message.discgun.no_gun": "No Gun CD Player in your inventory",

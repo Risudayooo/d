@@ -2,7 +2,9 @@ package com.risudayooo.discgun.net;
 
 import com.risudayooo.discgun.combat.Cooldowns;
 import com.risudayooo.discgun.combat.GunMechanics;
+import com.risudayooo.discgun.combat.GunServer;
 import com.risudayooo.discgun.combat.ParryState;
+import com.risudayooo.discgun.disc.DiscAbility;
 import com.risudayooo.discgun.disc.DiscType;
 import com.risudayooo.discgun.item.GunCDPlayerItem;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -14,15 +16,14 @@ import net.minecraft.sound.SoundEvents;
 
 /**
  * Registers the C2S payload types and their server-side handlers. The server is
- * the single source of truth: it re-derives the disc and checks cooldowns before
- * running any ability.
+ * the single source of truth: it re-derives the disc, checks ammo + cooldowns,
+ * and runs the ability.
  */
 public final class ModNetworking {
-	/** Blink cooldown, ticks (open-questions #4: ~2.5s). */
-	private static final int BLINK_COOLDOWN = 50;
-	private static final double BLINK_DISTANCE = 6.0;
+	/** Blink cooldown, ticks — short so it chains into movement. */
+	private static final int BLINK_COOLDOWN = 18;
+	private static final double BLINK_DISTANCE = 7.0;
 	private static final int PARRY_COOLDOWN = 20;
-	private static final int RELOAD_COOLDOWN = 30;
 
 	private ModNetworking() {
 	}
@@ -59,12 +60,25 @@ public final class ModNetworking {
 
 	private static void handleFire(ServerPlayerEntity player) {
 		ItemStack gun = heldGun(player);
-		if (gun.isEmpty()) {
+		if (gun.isEmpty() || GunServer.isReloading(player)) {
 			return;
 		}
-		DiscType disc = GunCDPlayerItem.getDisc(gun);
-		if (Cooldowns.tryUse(player, "fire", disc.ability().fireCooldownTicks())) {
-			disc.ability().onFire(player);
+		DiscAbility ability = GunCDPlayerItem.getDisc(gun).ability();
+		if (!Cooldowns.ready(player, "fire")) {
+			return;
+		}
+		int ammo = GunCDPlayerItem.getAmmo(gun);
+		if (ammo <= 0) {
+			player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+					SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.PLAYERS, 0.6f, 1.6f);
+			GunServer.startReload(player, gun, ability);
+			return;
+		}
+		Cooldowns.set(player, "fire", ability.fireCooldownTicks());
+		GunCDPlayerItem.setAmmo(gun, ammo - 1);
+		GunMechanics.fireShot(player, ability.damage(), ability.range(), ability.spreadDegrees(), ability.fireSound());
+		if (ammo - 1 <= 0) {
+			GunServer.startReload(player, gun, ability);
 		}
 	}
 
@@ -98,14 +112,10 @@ public final class ModNetworking {
 	}
 
 	private static void handleReload(ServerPlayerEntity player) {
-		if (heldGun(player).isEmpty()) {
+		ItemStack gun = heldGun(player);
+		if (gun.isEmpty()) {
 			return;
 		}
-		if (Cooldowns.tryUse(player, "reload", RELOAD_COOLDOWN)) {
-			// Phase 1 has no ammo model; reload just clears the fire cooldown + clicks.
-			Cooldowns.set(player, "fire", 0);
-			player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
-					SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 0.6f, 1.5f);
-		}
+		GunServer.startReload(player, gun, GunCDPlayerItem.getDisc(gun).ability());
 	}
 }

@@ -11,7 +11,10 @@
 	"disc.discgun.dnb": "DnB",
 
 	"tooltip.discgun.loaded_disc": "装填中のディスク: ",
+	"tooltip.discgun.ammo": "残弾: %s / %s",
 	"tooltip.discgun.controls": "左クリック射撃 / 右クリック固有 / Alt ブリンク / F パリィ / R リロード",
+
+	"hud.discgun.reloading": "リロード中...",
 
 	"message.discgun.disc_loaded": "%s を銃型CDプレイヤーに装填した",
 	"message.discgun.no_gun": "インベントリに銃型CDプレイヤーがありません",

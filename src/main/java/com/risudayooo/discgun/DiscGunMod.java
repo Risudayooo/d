@@ -1,5 +1,6 @@
 package com.risudayooo.discgun;
 
+import com.risudayooo.discgun.combat.GunServer;
 import com.risudayooo.discgun.combat.ParryState;
 import com.risudayooo.discgun.net.ModNetworking;
 import com.risudayooo.discgun.registry.ModComponents;
@@ -31,6 +32,7 @@ public class DiscGunMod implements ModInitializer {
 		ModItems.initialize();
 		ModNetworking.registerPayloads();
 		ModNetworking.registerReceivers();
+		GunServer.register();
 
 		// Parry (Phase 1: simple cancel). While the parry window is active, the
 		// player ignores all incoming damage. Phase 2 will branch on attack type.
